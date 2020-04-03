@@ -34,6 +34,7 @@
     </div>
     <!-- <i class="iconfont icon-shoujihao"></i>
     <i class="iconfont icon-lock"></i>-->
+    <img class="bigImg" src="../../assets/63485483_p0.jpg" alt />
   </div>
 </template>
 
@@ -47,6 +48,7 @@ export default {
         phone: '18611111111',
         code: '246810'
       },
+      isLoading: false,
       msg: {
         phone: '',
         code: ''
@@ -55,16 +57,25 @@ export default {
   },
   methods: {
     async login () {
+      // 将按钮设置为加载状态
+      this.isLoading = true
       if (this.checkData()) {
-        let res = await apiLogin({
-          mobile: this.obj.phone,
-          code: this.obj.code
-        })
-        window.console.log(res.data.data)
-        this.$router.push('/index')
+        try {
+          let res = await apiLogin({
+            mobile: this.obj.phone,
+            code: this.obj.code
+          })
+          window.console.log(res.data.data)
+          this.$store.commit('setUserInfo', res.data.data)
+          this.$router.push('/index')
+        } catch {
+          // 提示失败信息
+          this.$toast.fail('登陆失败')
+        }
       } else {
         window.console.log('验证不通过')
       }
+      this.isLoading = false
     },
     checkData () {
       var checkArr = []
@@ -104,5 +115,9 @@ export default {
 }
 .boxbtn {
   margin: 30px 20px;
+}
+.bigImg {
+  width: 100%;
+  height: 100%;
 }
 </style>

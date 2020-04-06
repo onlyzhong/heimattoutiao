@@ -30,7 +30,7 @@
     </van-cell-group>
     <!-- 登录按钮 -->
     <div class="boxbtn">
-      <van-button size="large" @click="login" type="info">登录</van-button>
+      <van-button size="large" :loading="isLoading" @click="login" type="info">登录</van-button>
     </div>
     <!-- <i class="iconfont icon-shoujihao"></i>
     <i class="iconfont icon-lock"></i>-->

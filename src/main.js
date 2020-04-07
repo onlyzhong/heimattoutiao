@@ -8,6 +8,9 @@ import 'vant/lib/index.css'
 // 使用字体图标文件
 import './style/index.css'
 
+// 导入过滤器
+import './filter/myfilter.js'
+
 // 使用 vant
 Vue.use(Vant)
 

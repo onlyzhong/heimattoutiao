@@ -15,3 +15,14 @@ export function apiGetArticleList ({ channelid, timestamp }) {
     }
   })
 }
+
+// 封装一个将文章标记为不喜欢的方法
+export function apiDisLike (target) {
+  return myHttp({
+    url: '/article/dislikes',
+    method: 'POST',
+    data: {
+      target
+    }
+  })
+}

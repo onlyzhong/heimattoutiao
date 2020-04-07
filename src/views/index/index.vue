@@ -30,11 +30,32 @@
             finished-text="没有更多了"
             @load="onLoad"
           >
-            <van-cell
-              v-for="(subitem, subindex) in item.articleList"
-              :key="subindex"
-              :title="subitem.title"
-            />
+            <van-cell border v-for="(subitem, subindex) in item.articleList" :key="subindex">
+              <template #title>
+                <!-- 标题 -->
+                <h3>{{ subitem.title }}</h3>
+                <!-- 文章图片 -->
+                <van-grid v-if="subitem.cover.type !== 0" :border="false" :column-num="3">
+                  <van-grid-item
+                    v-for="(imgitem, imgindex) in subitem.cover.images"
+                    :key="imgindex"
+                  >
+                    <van-image lazy-load :src="imgitem" />
+                  </van-grid-item>
+                </van-grid>
+                <!-- 文章信息区域 -->
+                <div class="contentbox">
+                  <div class="left">
+                    <span>{{ subitem.aut_name }}</span>
+                    <span>{{ subitem.comm_count }} 条评论</span>
+                    <span>{{ subitem.pubdate | timeFilter }}</span>
+                  </div>
+                  <div @click="openMoreBtn(subitem)" class="right">
+                    <van-icon name="cross" />
+                  </div>
+                </div>
+              </template>
+            </van-cell>
           </van-list>
         </van-pull-refresh>
       </van-tab>
@@ -45,7 +66,14 @@
     </div>
     <!-- 频道操作面板 -->
     <!-- 将频道列表数据从 index/index 中传入到 channel 中 -->
-    <channel :channelsList="channelsList" @addChannelsList="changChannelsList" ref="channel" />
+    <channel
+      :active.sync="active"
+      :channelsList="channelsList"
+      @addChannelsList="changChannelsList"
+      ref="channel"
+    />
+    <!-- "更多操作"组件 -->
+    <more :artid="artid" @delArt="delArt" ref="more" />
   </div>
 </template>
 <script>
@@ -56,7 +84,17 @@ import { getLocal } from '../../utils/mytoken'
 // 导入操作文章的方法
 import { apiGetArticleList } from '../../api/article'
 
+// 导入频道操作组件
 import channel from './com/channel.vue'
+
+// 导入"更多操作组"件
+import more from './com/more'
+
+// 向 vue 中注册这个指令
+// 图片懒加载
+import Vue from 'vue'
+import { Lazyload } from 'vant'
+Vue.use(Lazyload)
 
 export default {
   data () {
@@ -64,19 +102,42 @@ export default {
       // 保存频道数据
       channelsList: [],
       // 当前选中的 tab 的下标
-      active: 0
+      active: 0,
+      // 被点击的文章id
+      artid: 0
     }
   },
   methods: {
+
+    // 子组件不感兴趣删除文章
+    delArt (artid) {
+      this.channelsList[this.active].articleList.forEach((item, index) => {
+        if (artid === item.art_id) {
+          // 删除当前数据
+          this.channelsList[this.active].articleList.splice(index, 1)
+        }
+      })
+    },
+
+    // 打开更多操作按钮
+    openMoreBtn (subitem) {
+      this.$refs.more.show = true
+      // 记录id
+      this.artid = subitem.art_id
+    },
+
+    // 子组件添加频道后刷新频道
     changChannelsList (item) {
       this.channelsList.push(item)
       this.addOtherProps()
       window.console.log(this.channelsList)
     },
+
     // 打开频道操作面板
     openPopup () {
       this.$refs.channel.show = true
     },
+
     // list 组件上拉触底时执行
     async onLoad () {
       // 得到当前频道
@@ -100,6 +161,7 @@ export default {
       }
       window.console.log(this.channelsList)
     },
+
     // 下拉刷新时触发的事件
     onRefresh () {
       // 得到当前频道
@@ -113,6 +175,7 @@ export default {
       this.onLoad()
       this.onLoad()
     },
+
     // 得到频道数据
     async getChannels () {
       // 判断用户是否登录：判断
@@ -145,6 +208,7 @@ export default {
       // 给频道数据源中再添加一个属性 articleList
       this.addOtherProps()
     },
+
     // 给频道数据源中添加其它的属性
     addOtherProps () {
       this.channelsList.forEach(item => {
@@ -168,7 +232,8 @@ export default {
     this.getChannels()
   },
   components: {
-    channel
+    channel,
+    more
   }
 }
 </script>
@@ -177,7 +242,7 @@ export default {
 .index {
   margin-top: 92px;
   margin-bottom: 50px;
-  .van-tabs__wrap.van-tabs__wrap--scrollable.van-hairline--top-bottom {
+  .van-tabs__wrap.van-hairline--top-bottom {
     position: fixed;
     margin-right: 24px;
     z-index: 2;
@@ -195,6 +260,26 @@ export default {
     line-height: 44px;
     background-color: #ccc;
     color: #fff;
+  }
+  .contentbox {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .left {
+      span {
+        margin-right: 10px;
+        color: #999;
+        font-size: 12px;
+      }
+    }
+    .right {
+      border: 1px solid #ccc;
+      height: 14px;
+      padding: 0 5px;
+      line-height: 14px;
+      color: #999;
+      font-size: 12px;
+    }
   }
 }
 .doge {

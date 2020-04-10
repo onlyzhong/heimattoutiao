@@ -8,3 +8,20 @@ export function apiThink (key) {
     method: 'GET'
   })
 }
+
+// 封装一个搜索数据的方法
+export function apiSearch ({
+  page,
+  perPage,
+  key
+}) {
+  return myHttp({
+    url: '/search',
+    method: 'GET',
+    params: {
+      page: page, // 页码
+      per_page: perPage, // 页容量
+      q: key // 搜索的关键字
+    }
+  })
+}

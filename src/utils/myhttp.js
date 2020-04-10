@@ -2,10 +2,20 @@
 import axios from 'axios'
 // 导入 store
 import store from '../store/index.js'
-
+// 导入 json-bigint
+import JSONBigInt from 'json-bigint'
 // 创建一个 axios 实例
 const instance = axios.create({
-  baseURL: 'http://ttapi.research.itcast.cn/app/v1_0/'
+  baseURL: 'http://ttapi.research.itcast.cn/app/v1_0/',
+  transformResponse: [
+    function (data) {
+      try {
+        return JSONBigInt.parse(data)
+      } catch (error) {
+        return data
+      }
+    }
+  ]
 })
 
 // 设置拦截器

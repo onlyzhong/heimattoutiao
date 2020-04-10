@@ -73,7 +73,7 @@
       ref="channel"
     />
     <!-- "更多操作"组件 -->
-    <more :artid="artid" @delArt="delArt" ref="more" />
+    <more :artid="artid" :autid="autid" @delArt="delArt" ref="more" />
   </div>
 </template>
 <script>
@@ -97,6 +97,7 @@ import { Lazyload } from 'vant'
 Vue.use(Lazyload)
 
 export default {
+  props: ['isOpenSearch'],
   data () {
     return {
       // 保存频道数据
@@ -104,7 +105,9 @@ export default {
       // 当前选中的 tab 的下标
       active: 0,
       // 被点击的文章id
-      artid: 0
+      artid: 0,
+      // 被点击文章的作者id
+      autid: 0
     }
   },
   methods: {
@@ -124,6 +127,8 @@ export default {
       this.$refs.more.show = true
       // 记录id
       this.artid = subitem.art_id
+      // 记录当前文章的作者 id
+      this.autid = subitem.aut_id
     },
 
     // 子组件添加频道后刷新频道
@@ -230,6 +235,7 @@ export default {
   // 打开页面时，应该在这里得到频道数据
   mounted () {
     this.getChannels()
+    this.$emit('changeisOpenSearch', false)
   },
   components: {
     channel,

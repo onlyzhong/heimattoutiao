@@ -10,6 +10,10 @@ import Index from '../views/index'
 import Layout from '../views/layout'
 // 导入 my
 import My from '../views/my'
+// 导入 search
+import Search from '../views/search'
+// 导入searchresult
+import searchResult from '../views/search/com/searchresult.vue'
 
 Vue.use(Router)
 
@@ -30,6 +34,7 @@ export default new Router({
       path: '/login',
       component: Login
     },
+
     // 设置 layout
     {
       path: '/layout',
@@ -39,6 +44,14 @@ export default new Router({
         {
           path: '/index', // 请求的路由： /index
           component: Index
+        },
+        {
+          path: '/search',
+          component: Search,
+          children: [{
+            path: 'result',
+            component: searchResult
+          }]
         },
         // 我的路由
         {

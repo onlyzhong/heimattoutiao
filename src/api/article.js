@@ -2,7 +2,10 @@
 import myHttp from '../utils/myhttp'
 
 // 封装一个得到频道下文章的接口
-export function apiGetArticleList ({ channelid, timestamp }) {
+export function apiGetArticleList ({
+  channelid,
+  timestamp
+}) {
   return myHttp({
     // 由于这个地址与原本配置的基地址不同，如果需要覆盖，只需要把路径写全
     url: 'http://ttapi.research.itcast.cn/app/v1_1/articles',
@@ -23,6 +26,21 @@ export function apiDisLike (target) {
     method: 'POST',
     data: {
       target
+    }
+  })
+}
+
+// 封装个举报文章的接口
+export function apiReport ({
+  artid,
+  type
+}) {
+  return myHttp({
+    url: '/article/reports',
+    method: 'POST',
+    data: {
+      target: artid,
+      type
     }
   })
 }

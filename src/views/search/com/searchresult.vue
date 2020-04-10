@@ -1,16 +1,16 @@
 <template>
   <div>
-    <h1>我的页面</h1>
+    <h1>searchResult</h1>
+    {{ $route.query.key }}
   </div>
 </template>
 
 <script>
 export default {
-  mounted () {
-    this.$emit('changeisOpenSearch', false)
-  }
+
 }
 </script>
 
 <style>
+
 </style>

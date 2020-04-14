@@ -44,3 +44,29 @@ export function apiReport ({
     }
   })
 }
+
+// 封装一个获取文章详情的接口
+export function apiGetDetail (artid) {
+  return myHttp({
+    url: `/articles/${artid}`
+  })
+}
+
+// 封装一个点赞文章的方法
+export function apiLikings (id) {
+  return myHttp({
+    url: '/article/likings',
+    method: 'POST',
+    data: {
+      target: id
+    }
+  })
+}
+
+// 封装一个取消点赞的方法
+export function apiDisLikings (target) {
+  return myHttp({
+    url: `/article/likings/${target}`,
+    method: 'DELETE'
+  })
+}

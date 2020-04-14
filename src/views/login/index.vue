@@ -45,7 +45,7 @@ export default {
   data () {
     return {
       obj: {
-        phone: '18611111111',
+        phone: '15912121212',
         code: '246810'
       },
       isLoading: false,
@@ -67,7 +67,16 @@ export default {
           })
           window.console.log(res.data.data)
           this.$store.commit('setUserInfo', res.data.data)
-          this.$router.push('/index')
+          // this.$router.push('/index')
+          // 得到当前请求的路由
+          var path = this.$route.path
+          if (path === '/login') {
+            // 如果 path 是 Login 就跳转到首页
+            this.$router.push('/index')
+          } else {
+            // 如果 path 是 checklogin 就跳转到上一个页面
+            this.$router.back()
+          }
         } catch {
           // 提示失败信息
           this.$toast.fail('登陆失败')

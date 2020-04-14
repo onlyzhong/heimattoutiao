@@ -11,9 +11,12 @@ import './style/index.css'
 // 导入过滤器
 import './filter/myfilter.js'
 
+// 导入插件
+import myplugin from './utils/myplugin'
 // 使用 vant
 Vue.use(Vant)
-
+// 使用插件
+Vue.use(myplugin)
 Vue.config.productionTip = false
 
 new Vue({

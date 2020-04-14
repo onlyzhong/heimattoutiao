@@ -1,7 +1,7 @@
 <template>
   <div class="result">
     <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
-      <van-cell border v-for="(item, index) in searchList" :key="index">
+      <van-cell @click="toDetail(item)" border v-for="(item, index) in searchList" :key="index">
         <template #title>
           <!-- 标题 -->
           <h3>{{ item.title }}</h3>
@@ -52,14 +52,34 @@ export default {
     }
   },
   methods: {
+    // 跳转到详情页面
+    toDetail (item) {
+      // item:文章的信息
+      this.$router.push(`/detail?artid=${item.art_id}`)
+    },
     // 点赞
     zan () {
-      window.console.log('点赞')
+      // 登录验证
+      if (!this.$login()) {
+        // 未登录：不用理会
+        return
+      }
+      console.log('点赞')
     },
-
     // 评论
     comment () {
-      console.log('评论')
+      // 判断用户是否登录
+      // 得到用户的登录信息
+      var token = this.$store.state.userInfo.token
+      // 判断是否登录
+      if (!token) {
+        // 提示用户未登录：
+        this.$toast.fail('您还没有登录')
+        // 未登录: 跳转到登录页面
+        this.$router.push('/login')
+        return
+      }
+      console.log('后续代码')
     },
     // 加载 List 组件时会触发 & 上拉触发也会触发
     async onLoad () {

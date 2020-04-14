@@ -23,3 +23,22 @@ export function apiBlackList (autid) {
     }
   })
 }
+
+// 封装一个关注用户的接口
+export function apiFollow (autid) {
+  return myHttp({
+    url: '/user/followings',
+    method: 'POST',
+    data: {
+      target: autid
+    }
+  })
+}
+
+// 封装一个取关用户的接口
+export function apiUnFollow (autid) {
+  return myHttp({
+    url: `/user/followings/${autid}`,
+    method: 'DELETE'
+  })
+}

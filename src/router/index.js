@@ -14,7 +14,8 @@ import My from '../views/my'
 import Search from '../views/search'
 // 导入searchresult
 import searchResult from '../views/search/com/searchresult.vue'
-
+// 导入Detail
+import Detail from '../views/detail'
 Vue.use(Router)
 
 export default new Router({
@@ -33,6 +34,16 @@ export default new Router({
     {
       path: '/login',
       component: Login
+    },
+    // 验证登录路由
+    {
+      path: '/checkLogin',
+      component: Login
+    },
+    // 详情页面路由
+    {
+      path: '/detail',
+      component: Detail
     },
 
     // 设置 layout
